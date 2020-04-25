@@ -99,8 +99,17 @@ export default {
       this.user.imgUrl = url;
       this.updateUser();
     },
-    changeName() {
+    async changeName() {
       this.user.username = this.newName;
+      await this.$store.commit({
+        type: "updateUserName",
+        user: this.user
+      });
+
+      await this.$store.dispatch({
+        type: "saveBoards"
+      });
+
       this.updateUser();
     },
     getUserActivitylog() {
@@ -111,7 +120,11 @@ export default {
       this.activitieslog = this.$store.getters.currActivitylog;
     }
   },
-  created() {
+  async created() {
+    await this.$store.dispatch({
+      type: "loadBoards"
+    });
+
     this.getUserActivitylog();
     if (this.$route.params.id) {
       this.msg = "You don't have any activity on this board";

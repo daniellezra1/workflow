@@ -121,3 +121,16 @@
     margin: rem(20px);
   }
 }
+
+@media (max-width: $break-narrow-s) {
+    .user-profile {
+      min-width: 240px;
+      right: -140px;
+      top: 43px;
+      transform: translate(-50%, 0%);
+
+      header {
+        min-width: 240px;
+      }
+    }
+}

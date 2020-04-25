@@ -2,6 +2,9 @@ import { boardService } from '../services/board.service.js';
 import { utilService } from '../services/util.service.js';
 import socketService from "../services/socket.service.js";
 
+const MAX_ACTIVITIES = 150;
+const ACTIVITIES_TO_DELETE = 50;
+
 export default {
     state: {
         boards: null,
@@ -58,7 +61,6 @@ export default {
             state.currActivitylog = state.board.activitieslog.filter(activity => activity.taskId === taskId);
         },
         getUserActivitylog(state, { userId }) {
-            console.log(state.board, 'state')
             state.currActivitylog = state.board.activitieslog.filter(activity => activity.user._id === userId);
         },
         setEmptyChecklist(state) {
@@ -143,8 +145,30 @@ export default {
             state.currId = id
         },
         updateActivitieslog(state, { activitylog }) {
+            if (state.board.activitieslog.length >= MAX_ACTIVITIES) {
+                const startIndex = state.board.activitieslog.length - ACTIVITIES_TO_DELETE;
+
+                state.board.activitieslog = state.board.activitieslog.slice(0, startIndex);
+                state.currActivitylog = JSON.parse(JSON.stringify(state.board.activitieslog));
+            }
+
             activitylog.user = this.state.userStore.loggedinUser;
             state.board.activitieslog.unshift(activitylog);
+        },
+        updateUserName(state, { user }) {
+            state.boards.forEach(board => {
+                const member = board.members.find(member => member._id === user._id);
+                if (member) {
+                    member.username = user.username;
+                    board.taskLists.forEach(taskList => {
+                        taskList.tasks.forEach(task => {
+                            if (task.status.member._id === user._id) {
+                                task.status.member.username = user.username;
+                            }
+                        })
+                    })
+                }
+            })
         }
     },
     actions: {
@@ -252,6 +276,12 @@ export default {
             const savedBoard = await boardService.save(context.state.board);
             socketService.emit("update board", savedBoard);
             return savedBoard;
+        },
+        async saveBoards(context) {
+            await context.state.boards.forEach(board => {
+                socketService.emit("update board", board);
+                boardService.save(board);
+            })
         }
     }
 }

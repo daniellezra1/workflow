@@ -17,16 +17,6 @@
     border-radius: 10px;
     background: $clr5;
   }
-  .msg-container {
-    position: fixed;
-    bottom: 2px;
-    right: 0;
-    background-color: $clr8;
-    padding: 10px;
-    border-radius: 3px;
-    z-index: 1000;
-    box-shadow: 0 0.0625rem 0 rgba(9, 30, 66, 0.25);
-  }
   .task-details {
     position: absolute;
     z-index: 999;

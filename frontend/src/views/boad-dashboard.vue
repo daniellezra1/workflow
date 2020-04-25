@@ -137,6 +137,7 @@ export default {
       board.members.forEach(member => {
         mapMembersTasks.push({
           username: member.username,
+          userId: member._id,
           allTasks: 0,
           doneTasks: 0
         });
@@ -177,8 +178,9 @@ export default {
           if (task.members.length > 0) {
             task.members.forEach(member => {
               mapMembersTasks.forEach(mapMember => {
-                if (mapMember.username === member.username)
+                if (mapMember.username === member.username){
                   mapMember.allTasks++;
+                }
               });
             });
           }

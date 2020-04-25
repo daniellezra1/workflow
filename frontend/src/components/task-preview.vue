@@ -44,7 +44,6 @@
           <span>{{todosAmount}}</span>
         </div>
 
-        <!-- <span v-if="task.status.isDone" class="el-icon-finished icon isDone"></span> -->
         <span v-if="task.status.isDone" class="el-icon-check icon isDone"></span>
 
         <div class="members" v-if="task.members">

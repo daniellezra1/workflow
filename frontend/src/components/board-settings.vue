@@ -226,6 +226,7 @@ export default {
     this.board.members.forEach(member => {
       mapMembersTasks.push({
         username: member.username,
+        userId: member._id,
         allTasks: 0,
         doneTasks: 0
       });
@@ -241,7 +242,11 @@ export default {
         tasksCount++;
         if (task.status.isDone) {
           mapMembersTasks.forEach(mapMember => {
-            if (mapMember.username === task.status.member.username) {
+            if (
+              mapMember.userId === task.status.member._id ||
+              (mapMember.username === "guest" &&
+                mapMember.username === task.status.member.username)
+            ) {
               mapMember.doneTasks++;
               completedTasksCount++;
             }
@@ -250,7 +255,13 @@ export default {
         if (task.members.length > 0) {
           task.members.forEach(member => {
             mapMembersTasks.forEach(mapMember => {
-              if (mapMember.username === member.username) mapMember.allTasks++;
+              if (
+                mapMember.userId === member._id ||
+                (mapMember.username === "guest" &&
+                  mapMember.username === member.username)
+              ) {
+                mapMember.allTasks++;
+              }
             });
           });
         }

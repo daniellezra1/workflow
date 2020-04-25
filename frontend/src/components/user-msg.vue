@@ -26,7 +26,7 @@ export default {
       this.msg = msg;
       setInterval(() => {
         this.msg = null;
-      }, 4000);
+      }, 2000);
     });
   }
 };

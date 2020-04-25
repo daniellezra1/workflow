@@ -28,7 +28,7 @@
         v-for="img in imgs"
         :key="img"
         :style="{ 'background-image': 'url(' + img + ')' }"
-        @click="setBgc('img', img)"
+        @click="setBgc('url', img)"
       ></div>
     </div>
   </div>
@@ -103,10 +103,7 @@ export default {
       isOptionOpen: false,
       isOptionColorOpen: false,
       isOptionImgOpen: false,
-      currBgc: {
-        color: "",
-        url: ""
-      }
+      currBgc: null
     };
   },
   methods: {
@@ -126,8 +123,11 @@ export default {
       this.isOptionImgOpen = false;
     },
     setBgc(type, value) {
-      if (type === "color") this.currBgc.color = value;
-      if (type === "img") this.currBgc.url = value;
+      this.currBgc = {
+        color: "",
+        url: ""
+      };
+      this.currBgc[type] = value;
       this.$emit("set-bgc", this.currBgc);
     }
   }
